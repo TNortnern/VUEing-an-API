@@ -1,0 +1,70 @@
+.flexCards{
+    display:flex;
+    justify-content: center
+}
+
+.card-text{
+    font-size:80%
+}
+
+.card, .width100{
+    width:100%
+}
+
+.m-checkout{
+    border:2px solid black
+}
+
+.text-muted{
+    font-size:1.5em
+}
+
+.fa-shopping-cart:hover{
+    transform: scale(1.1);
+}
+
+.jumbotron{
+    background-color:white
+}
+
+body{
+    background-image: url(wood.jpg)
+}
+
+.bg-white{
+    background-color: white
+}
+
+.container .bg-white{
+    padding:2% 7.9%;
+    border: 1px solid gray;
+    border-radius:5px
+}
+
+
+.items .card-body{
+    text-align: center
+}
+
+.fa-arrow-circle-up,.fa-arrow-circle-down{
+    font-size:1.5em;
+    margin-left:4%;
+    opacity:0.8;
+    cursor: pointer
+}
+
+.fa-arrow-circle-up{
+    color:green
+}
+
+.fa-arrow-circle-down{
+    color:red
+}
+
+.fa-arrow-circle-down:hover{
+    opacity: 1
+}
+
+.fa-arrow-circle-up:hover{
+    opacity: 1
+}
