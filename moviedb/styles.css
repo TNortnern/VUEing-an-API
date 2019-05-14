@@ -1,14 +1,39 @@
 .flexCards{
     display:flex;
-    justify-content: center
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row
 }
 
 .card-text{
-    font-size:80%
+    font-size:100%
 }
 
-.card, .width100{
+.width100{
     width:100%
+}
+
+.width50{
+width:50%
+
+}
+
+.cBlack{
+    color:black
+}
+
+.card-title{
+    word-break: break-word;
+   white-space: pre-wrap;
+   -moz-white-space: pre-wrap; 
+}
+
+.width30{
+width:30%
+
+}
+.card{
+    width:30%
 }
 
 .m-checkout{
@@ -28,7 +53,9 @@
 }
 
 body{
-    background-image: url(wood.jpg)
+    background-image: url(wood.jpg);
+    background-size: cover;
+    background-repeat: no-repeat
 }
 
 .bg-white{
