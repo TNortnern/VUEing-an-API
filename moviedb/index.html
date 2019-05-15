@@ -15,6 +15,7 @@
 
 <body>
     <div id="app">
+      <div id="cartMessage" class="alert alert-success">Added to Cart</div>
      <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light; top: 50">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">BuyMoviesCheap <i class="fas fa-film"></i></a>
@@ -35,10 +36,10 @@
     </ul>
    
 <span style="color:#007bff;cursor: pointer" class="navbar-text">
-      <i class="fas fa-shopping-cart"></i> <span style="color:black">({{amountOf}})</span>
+      <i id="cartButton" class="fas fa-shopping-cart"></i> <span id="cartAmt" style="color:rgb(0, 123, 255)">({{amountOf}})</span>
     </span>
     
-<div style="overflow-y: auto; max-height: 4600px; height:460px; width:700px" uk-dropdown="delay-hide: 150; animation: uk-animation-slide-top-small; duration: 300">
+<div id="cart" style="overflow-y: auto; max-height: 4600px; height:460px; width:700px" uk-dropdown="delay-hide: 150; animation: uk-animation-slide-top-small; duration: 300">
     <ul class="uk-nav uk-dropdown-nav">
         <div v-if="items.length > 0" class="container ">
             <div style="text-align:center" class="card-group">
@@ -84,7 +85,7 @@
             <div class="card-group">
                 <div style="width:100%" class="card"> <img v-bind:src="item.image" class="card-img-top" alt="movie">
                     <div class="card-body">
-                        <h5 class="card-title">{{item.title}}</h5> </div>
+                        <h5 class="card-title cBlack">{{item.title}}</h5> </div>
                 </div>
                 <div style="width:100%" class="card">
                     <div v-if="item.adultQuanity != 0" class="card-body">
@@ -109,7 +110,7 @@
                         <i @click="increase(item.childQuanity, index, 'child')" class="fas fa-arrow-circle-up"></i>
                         <i @click="decrease(item.childQuanity, index, 'child')" class="fas fa-arrow-circle-down"></i>
                         </h5>
-                        <p class="card-text">Total: ${{calculateTotal(item.childPrice, item.childQuanity)}}</p>
+                        <p class="card-text cBlack">Total: ${{calculateTotal(item.childPrice, item.childQuanity)}}</p>
                     </div>
                 </div>
                 <div class="card">
@@ -152,7 +153,6 @@
     <p class="lead">Tired of the ads on 123movies? Buy some movies from CPM!</p>
   </div>
 </div>
-        <div v-once id="movies"> {{movieCall()}} </div>
         <div class="container flexCards">
             <div v-for="(movie,index) of movies" class="card">
                 <div class="card-body d-flex flex-column"> <img v-bind:src="movie.image" alt="">
@@ -270,158 +270,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit-icons.min.js"></script>
     <script src="app.js"></script>
+    <script src="jquery.js"></script>
 </body>
 
 </html>
-<script>
-    
-    $(document).ready(function () {
-        var app = new Vue({
-            el: "#app"
-            , data: {
-                stuff: "Hello World"
-                , movies: [
-
-                ]
-                , items: [
-
-                ],
-                amountOf:0
-            , }
-            , methods: {
-                 updateQuanity: function(item, l, type) {
-                    let updater = document.querySelectorAll(".updater")[l];
-                     let val = $(updater).val();
-                     console.log(val)
-                    if(type == "child"){
-                this.items[l].childQuanity = val;
-                    }else{
-                        this.items[l].adultQuanity = val;
-                    }
-                },
-            
-                increase: function(item, l, type) {
-                    if(type == "child"){
-                this.items[l].childQuanity++;
-                    }else{
-                        this.items[l].adultQuanity++;
-                    }
-                },
-               decrease: function(item, l, type) {
-                    if(type == "child"){
-                    this.items[l].childQuanity--;
-                    }else{
-                        this.items[l].adultQuanity--;
-                    }
-                   
-                   if(this.items[l].adultQuanity == 0 && this.items[l].childQuanity == 0){
-                       this.items.splice(l, 1);
-                       this.amountOf--;
-                   }
-                },
-                addNums:function(num1, num2){
-                    return Number(num1 + num2).toFixed(2);
-                },
-                
-                removeMovie: function (item) {
-                   this.items.splice(item, 1);
-                    this.amountOf--;
-                }
-                , calculateTotal: function (price, quanity) {
-                    return (price * quanity).toFixed(2);
-                }
-                , movieCall: function () {
-                    $.getJSON("https://api.themoviedb.org/3/movie/now_playing?api_key=9d9f46b8451885697e5cf7d1927da80f", function (movie) {
-                        for (let i = 0; i < 6; i++) {
-                            app.movies.push({
-                                title: movie.results[i].title
-                                , description: movie.results[i].overview
-                                , image: "http://image.tmdb.org/t/p/w200/" + movie.results[i].poster_path
-                                , adultTicket: parseFloat((movie.results[i].popularity / 10)).toFixed(2)
-                                , childTicket: parseFloat(movie.results[i].popularity / 20).toFixed(2)
-                                , adultQuanity: 0
-                                , childQuanity: 0
-                            });
-                        }
-                    })
-                }
-                , addTicket: function (index, movie, ticketType) {
-                    let x = 0;
-                    let contains = false;
-                    for (let i = 0; i < this.movies.length; i++) {
-                        if (this.movies[i].title == movie) {
-                            x = i;
-                        }
-                    }
-                    console.log(movie)
-                    if (this.items.length != 0) {
-                        for (let z = 0; z < this.items.length; z++) {
-                            if (this.items[z].title.includes(movie) == true) {
-                                contains = true;
-                            }
-                        }
-                    }
-                    let movieIndex = (this.items.map((el) => el.title).indexOf(movie));
-                    if (ticketType == "adult") {
-                        if (contains != true) {
-                            this.items.push({
-                                title: this.movies[x].title
-                                , adultQuanity: this.movies[x].adultQuanity += 1
-                                , childQuanity: this.movies[x].childQuanity
-                                , adultPrice: this.movies[x].adultTicket
-                                , childPrice: this.movies[x].childTicket,
-                                image: this.movies[x].image
-                            });
-                            this.amountOf++;
-                        }
-                        else {
-                            this.items[movieIndex].adultQuanity++
-                        }
-                    }
-                    else if (ticketType == "child") {
-                        if (contains != true) {
-                            this.items.push({
-                                title: this.movies[x].title
-                                , childQuanity: this.movies[x].childQuanity += 1
-                                , adultQuanity: this.movies[x].adultQuanity
-                                , adultPrice: this.movies[x].adultTicket
-                                , childPrice: this.movies[x].childTicket,
-                                image: this.movies[x].image
-                            , });
-                            this.amountOf++;
-                        }
-                        else {
-                            this.items[movieIndex].childQuanity++
-                        }
-                    }
-                    
-                }
-            }
-            , computed: {
-                totalItem: function () {
-                    let sum = 0;
-                    this.items.forEach(function (item) {
-                        sum += Number(item.adultPrice * item.adultQuanity) + Number(item.childPrice * item.childQuanity);
-                    });
-                    return sum.toFixed(2);
-                },
-                
-                
-                childTotal: function () {
-                    let sum = 0;
-                    this.items.forEach(function (item) {
-                        sum += Number(item.childPrice * item.childQuanity);
-                    });
-                    return sum.toFixed(2);
-                },
-                adultTotal: function () {
-                    let sum = 0;
-                    this.items.forEach(function (item) {
-                        sum += Number(item.adultPrice * item.adultQuanity);
-                    });
-                    return sum.toFixed(2);
-                }
-            }
-        })
-    })
-</script>
