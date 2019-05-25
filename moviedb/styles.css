@@ -54,7 +54,7 @@ width:30%
 
 #cartMessage{
     display:none;
-    text-align: center; position: fixed; top:9%; width: 100%; z-index: 50000;
+    text-align: center; position: fixed; top:7%; width: 100%; z-index: 50000;
 }
 
 .shaker {
