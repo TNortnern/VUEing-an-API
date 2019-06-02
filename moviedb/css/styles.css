@@ -1,0 +1,232 @@
+.flexCards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row
+}
+
+#cart {
+    overflow-y: auto;
+    max-height: 4600px;
+    height: 460px;
+    width: 700px
+}
+
+.card-text {
+    font-size: 100%
+}
+
+.width100 {
+    width: 100%
+}
+
+.width50 {
+    width: 50%
+}
+
+.cBlack {
+    color: black !important
+}
+
+.card-title {
+    word-break: break-word;
+    white-space: pre-wrap;
+    -moz-white-space: pre-wrap;
+}
+
+.width30 {
+    width: 30%
+}
+
+.card {
+    width: 30%
+}
+
+.m-checkout {
+    border: 2px solid black
+}
+
+.text-muted {
+    font-size: 1.5em
+}
+
+.fa-shopping-cart:hover {
+    transform: scale(1.1);
+}
+
+.jumbotron {
+    background-color: white
+}
+
+#cartMessage {
+    display: none;
+    text-align: center;
+    position: fixed;
+    top: 7%;
+    width: 100%;
+    z-index: 50000;
+}
+
+.shaker {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 1s;
+
+    /* When the animation is finished, start again */
+    animation-iteration-count: 4;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+body {
+    background-image: url(./images/wood.jpg);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+.bg-white {
+    background-color: white
+}
+
+.container .bg-white {
+    padding: 2% 7.9%;
+    border: 1px solid gray;
+    border-radius: 5px
+}
+
+
+.items .card-body {
+    text-align: center
+}
+
+.fa-arrow-circle-up,
+.fa-arrow-circle-down {
+    font-size: 1.5em;
+    margin-left: 4%;
+    opacity: 0.8;
+    cursor: pointer
+}
+
+.fa-arrow-circle-up {
+    color: green
+}
+
+.fa-arrow-circle-down {
+    color: red
+}
+
+.fa-arrow-circle-down:hover {
+    opacity: 1
+}
+
+.fa-arrow-circle-up:hover {
+    opacity: 1
+}
+
+@media (max-width:500px){
+    .card-body{
+        padding:0
+    }
+
+    .smaller{
+        font-size:.8em
+    }
+
+    .text-muted{
+        font-size:.7em
+    }
+
+    .m-checkout{
+        font-size:.84em;
+        overflow:auto;
+        white-space: pre-line;
+        height:80px;
+        width:80px
+    }
+    .card-title, .card-text{
+        font-size:.7em
+    }
+}
+
+
+/* Landscape phones and down */
+@media (max-width: 641px) {
+    #cart {
+        overflow: auto;
+        height: 350px;
+        width: 100%;
+        left:0% !important
+    }
+    #emptyCart{
+        font-size:1.5em !important
+    }
+
+    .card-group{
+        flex-direction: row
+    }
+    .items .card-body{
+        overflow: auto
+    }
+    
+    .dTitle{
+        text-align: center
+    }
+
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    .card {
+        width: 100%
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width:768px) and (max-width: 1000px) {
+    .card {
+        width: 50%
+    }
+}

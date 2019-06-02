@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/css/uikit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>MoviesOnDemand</title>
+</head>
+
+<body>
+  <div id="app">
+    <div id="cartMessage" class="alert alert-success">Added to Cart</div>
+    <div
+      uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light; top: 50">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">MoviesonDemand <i class="fas fa-film"></i></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Clothes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Music</a>
+            </li>
+          </ul>
+
+          <span style="color:#007bff;cursor: pointer" class="navbar-text">
+            <i id="cartButton" class="fas fa-shopping-cart"></i> <span id="cartAmt"
+              style="color:rgb(0, 123, 255)">({{amountOf}})</span>
+          </span>
+
+          <div id="cart" style=""
+            uk-dropdown="delay-hide: 150; animation: uk-animation-slide-top-small; duration: 300">
+            <ul class="uk-nav uk-dropdown-nav">
+              <div v-if="items.length > 0" class="container ">
+                <div style="text-align:center" class="card-group">
+                  <div class="card">
+
+                    <div class="card-body">
+
+                      <p class="card-text"><small class="text-muted">Movie</small></p>
+                    </div>
+                  </div>
+                  <div class="card">
+
+                    <div class="card-body">
+
+                      <p class="card-text"><small class="text-muted">High</small></p>
+                    </div>
+                  </div>
+                  <div class="card">
+
+                    <div class="card-body">
+
+                      <p class="card-text"><small class="text-muted">Low</small></p>
+                    </div>
+                  </div>
+                  <div class="card">
+
+                    <div class="card-body">
+
+                      <p class="card-text"><small class="text-muted">Subtotal</small></p>
+                    </div>
+                  </div>
+                  <div class="card">
+
+                    <div class="card-body">
+
+                      <p class="card-text"><small class="text-muted">Delete</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align: center" v-else>
+                <h1 id="emptyCart">Your cart is currently empty</h1>
+              </div>
+              <div class="items container" v-for="(item,index) of items">
+                <div class="card-group">
+                  <div style="width:100%" class="card"> <img v-bind:src="item.image" class="card-img-top" alt="movie">
+                    <div class="card-body">
+                      <h5 class="card-title cBlack">{{item.title}}</h5>
+                    </div>
+                  </div>
+                  <div style="width:100%" class="card">
+                    <div v-if="item.adultQuanity != 0" class="card-body">
+                      <!--
+                        <input class="updater" style="width:30%" type="number" :value="item.adultQuanity"><br>
+                       <button v-on:click="updateQuanity(item.adultQuanity, index, 'adult')" class="btn btn-success">Update</button>
+-->
+                      <h5 class="card-title cBlack">${{item.adultPrice}} x {{item.adultQuanity}}
+                        <i @click="increase(item.childQuanity, index, 'adult')" class="fas fa-arrow-circle-up"></i>
+                        <i @click="decrease(item.childQuanity, index, 'adult')" class="fas fa-arrow-circle-down"></i>
+                      </h5>
+                      <p class="card-text cBlack">Total: ${{calculateTotal(item.adultPrice, item.adultQuanity)}}</p>
+                    </div>
+                  </div>
+                  <div style="width:100%" class="card">
+                    <div v-if="item.childQuanity != 0" class="card-body">
+                      <!--
+                       <input class="updater" style="width:30%" type="number" :value="item.childQuanity"><br>
+                       <button v-on:click="updateQuanity(item.childQuanity, index, 'child')" class="btn btn-success">Update</button>
+-->
+                      <h5 class="card-title cBlack">${{item.childPrice}} x {{item.childQuanity}}
+                        <i @click="increase(item.childQuanity, index, 'child')" class="fas fa-arrow-circle-up"></i>
+                        <i @click="decrease(item.childQuanity, index, 'child')" class="fas fa-arrow-circle-down"></i>
+                      </h5>
+                      <p class="card-text cBlack">Total: ${{calculateTotal(item.childPrice, item.childQuanity)}}</p>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-body" style="text-align: center">
+                      <p class="card-text cBlack">
+                        ${{
+                        addNums
+                        (
+                        Number(calculateTotal(item.childPrice, item.childQuanity)), 
+                        Number(calculateTotal(item.adultPrice, item.adultQuanity))
+                        )
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-body" style="text-align: center">
+                      <p class="card-text">
+                        <button v-on:click="removeMovie(index)" class="btn btn-primary smaller">Remove</button>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="container width100" style="text-align:center" v-if="items.length > 0">
+                <div class="btn btn-primary width30 m-checkout" v-if="childTotal != 0">Low Quality
+                  Subtotal:<br>${{childTotal}}</div>
+                <div class="btn btn-primary width30 m-checkout" v-if="adultTotal != 0">High Quality
+                  Subtotal:<br>${{adultTotal}}</div>
+                <div class="btn btn-primary width30 m-checkout">Total:<br>${{totalItem}}</div><br>
+                <button style="width:100%" class="btn btn-success">Checkout</button>
+              </div>
+            </ul>
+          </div>
+
+        </div>
+      </nav>
+    </div>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">We Sell Movies on Demand</h1>
+        <p class="lead">Tired of the ads? Buy some movies from MoD!</p>
+      </div>
+    </div>
+    <div class="container" style="padding:3%;background-color:gray;text-align:center;border-radius:20px; margin-bottom:2%">
+      <form @submit="findMovies">
+        <div class="form-row">
+          <div class="col">
+            <label style="text-align:center;color:white; font-size:1.5em" for="count">Enter the amount of available movies you want shown</label><br>
+            <input style="text-align:center;font-size:1.4em" name="count" v-bind:value=movieCount @keyUp="findMovies" @change="findMovies" type="number" min="1" max="20" id="movieFinder" class="form-control"
+              placeholder="Enter the amount of available movies you want shown">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div v-if="movies == 0" class="text-center" style="padding:10%;">
+  <div style="margin-bottom:20px" class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+    <div class="container flexCards">
+      <div v-for="(movie,index) of movies" class="card">
+        <div class="card-body d-flex flex-column"> <img v-bind:src="movie.image" alt="">
+          <div class="card-title dTitle">{{movie.title}}</div>
+          <p class="card-text">{{movie.description}}</p>
+          <div class="mt-auto" style="text-align: center">
+            <button @click="addTicket(index, movie.title, 'adult')" class="btn btn-primary"
+              v-bind:value="movie.adultTicket">High Quality</button>
+            <button @click="addTicket(index, movie.title, 'child')" class="btn btn-warning">Low Quality</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.4/js/uikit-icons.min.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/jquery.js"></script>
+</body>
+
+</html>
